@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debate Arena</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, Arial, sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0%, #0b0f19 45%, #05070d 100%);
+      color: #f8fafc;
+    }
+
+    .page {
+      width: min(1120px, 92%);
+      margin: 0 auto;
+      padding: 48px 0;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #818cf8, #22d3ee);
+      color: #020617;
+      font-weight: 900;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ghost-button,
+    .primary-button,
+    .topic-button {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      border-radius: 999px;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .ghost-button {
+      padding: 10px 16px;
+      background: rgba(148, 163, 184, 0.08);
+      color: #cbd5e1;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+    }
+
+    .primary-button {
+      padding: 12px 18px;
+      background: #f8fafc;
+      color: #020617;
+      font-weight: 700;
+    }
+
+    .ghost-button:hover,
+    .primary-button:hover,
+    .topic-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 36px;
+      align-items: start;
+    }
+
+    .hero-copy h1 {
+      max-width: 720px;
+      font-size: clamp(2.6rem, 7vw, 5.7rem);
+      line-height: 0.92;
+      letter-spacing: -0.08em;
+      margin-bottom: 24px;
+    }
+
+    .hero-copy p {
+      max-width: 630px;
+      color: #cbd5e1;
+      font-size: 1.08rem;
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 34px;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 680px;
+    }
+
+    .stat-card {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      backdrop-filter: blur(18px);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+    }
+
+    .stat-card span {
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .panel {
+      border-radius: 30px;
+      background: rgba(15, 23, 42, 0.84);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 22px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    }
+
+    .panel-header p {
+      color: #94a3b8;
+      margin-top: 6px;
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+
+    .panel-body {
+      padding: 22px;
+    }
+
+    .tab-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .tab {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      background: rgba(148, 163, 184, 0.08);
+      color: #cbd5e1;
+      font-size: 0.82rem;
+    }
+
+    .tab.active {
+      background: rgba(129, 140, 248, 0.18);
+      color: #e0e7ff;
+      border-color: rgba(129, 140, 248, 0.4);
+    }
+
+    .topic-list {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .topic-button {
+      width: 100%;
+      text-align: left;
+      padding: 14px 16px;
+      background: rgba(2, 6, 23, 0.38);
+      color: #e2e8f0;
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      border-radius: 18px;
+      line-height: 1.45;
+    }
+
+    .topic-button:hover,
+    .topic-button.selected {
+      background: rgba(129, 140, 248, 0.16);
+      border-color: rgba(129, 140, 248, 0.48);
+    }
+
+    .custom-box {
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.14);
+    }
+
+    label {
+      display: block;
+      color: #e2e8f0;
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 92px;
+      resize: vertical;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: rgba(2, 6, 23, 0.46);
+      color: #f8fafc;
+      font: inherit;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: rgba(34, 211, 238, 0.58);
+    }
+
+    .helper {
+      margin-top: 8px;
+      color: #94a3b8;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .warning {
+      display: none;
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(248, 113, 113, 0.12);
+      color: #fecaca;
+      border: 1px solid rgba(248, 113, 113, 0.22);
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .start-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .difficulty {
+      color: #94a3b8;
+      font-size: 0.84rem;
+    }
+
+    .chat-preview {
+      margin-top: 42px;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 18px;
+    }
+
+    .coach-card,
+    .rules-card {
+      padding: 22px;
+      border-radius: 28px;
+      background: rgba(15, 23, 42, 0.76);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .coach-card h2,
+    .rules-card h2 {
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
+
+    .coach-card p,
+    .rules-card li {
+      color: #cbd5e1;
+      line-height: 1.65;
+      font-size: 0.94rem;
+    }
+
+    .rules-card ul {
+      padding-left: 20px;
+      display: grid;
+      gap: 8px;
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .chat-preview {
+        grid-template-columns: 1fr;
+      }
+
+      .navbar {
+        margin-bottom: 42px;
+      }
+
+      .stat-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .nav-actions {
+        display: none;
+      }
+
+      .hero-copy h1 {
+        font-size: 3rem;
+      }
+
+      .hero-buttons,
+      .start-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="navbar">
+      <div class="logo">
+        <div class="logo-mark">D</div>
+        <span>Debate Arena</span>
+      </div>
+      <div class="nav-actions">
+        <button class="ghost-button">How it works</button>
+        <button class="primary-button">Start practice</button>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <h1>Train your argument against an AI opponent.</h1>
+        <p>
+          Pick a focused debate topic, choose a side, and practise responding to rebuttals. The AI coach tests your reasoning, spots weak claims, and helps you build stronger arguments.
+        </p>
+        <div class="hero-buttons">
+          <button class="primary-button">Create debate room</button>
+          <button class="ghost-button">View sample debate</button>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-card">
+            <strong>3</strong>
+            <span>Rounds per debate</span>
+          </div>
+          <div class="stat-card">
+            <strong>10</strong>
+            <span>Point feedback score</span>
+          </div>
+          <div class="stat-card">
+            <strong>AI</strong>
+            <span>Opponent and coach</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="panel">
+        <div class="panel-header">
+          <h2>Choose your topic</h2>
+          <p>Select from popular prompts or write your own. Overly broad topics will be blocked.</p>
+        </div>
+
+        <div class="panel-body">
+          <div class="tab-row">
+            <button class="tab active">Most popular</button>
+            <button class="tab">Technology</button>
+            <button class="tab">Society</button>
+          </div>
+
+          <div class="topic-list" id="topicList">
+            <button class="topic-button">Should AI be allowed to assist military decision-making if humans approve the final action?</button>
+            <button class="topic-button">Should schools limit students' use of AI tools for homework?</button>
+            <button class="topic-button">Should teenagers have stricter screen-time limits on social media platforms?</button>
+            <button class="topic-button">Should governments prioritise climate adaptation over reducing emissions?</button>
+            <button class="topic-button">Should online platforms remove political misinformation more aggressively?</button>
+          </div>
+
+          <div class="custom-box">
+            <label for="customTopic">Write your own topic</label>
+            <textarea id="customTopic" placeholder="Example: Should schools ban phones during lesson time?"></textarea>
+            <p class="helper">Good topics are specific, balanced, debatable, and answerable in one debate session.</p>
+            <div class="warning" id="warningBox"></div>
+
+            <div class="start-row">
+              <span class="difficulty" id="topicStatus">No custom topic selected.</span>
+              <button class="primary-button" id="startButton">Enter debate</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="chat-preview">
+      <div class="coach-card">
+        <h2>Debate flow</h2>
+        <p>
+          Round 1: Opening argument. Round 2: AI rebuttal. Round 3: final defence. After that, the AI gives a score for logic, evidence, clarity, and persuasion.
+        </p>
+      </div>
+
+      <div class="rules-card">
+        <h2>Topic safety rules</h2>
+        <ul>
+          <li>Blocked if the topic is too broad, such as “war”, “politics”, or “life”.</li>
+          <li>Blocked if it asks for harmful, hateful, violent, or illegal advice.</li>
+          <li>Blocked if it targets a protected group or encourages harassment.</li>
+          <li>Allowed if it is framed as a focused policy, ethics, school, technology, or society debate.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const topicButtons = document.querySelectorAll('.topic-button');
+    const customTopic = document.getElementById('customTopic');
+    const warningBox = document.getElementById('warningBox');
+    const topicStatus = document.getElementById('topicStatus');
+    const startButton = document.getElementById('startButton');
+
+    const broadTopics = [
+      'war',
+      'politics',
+      'religion',
+      'life',
+      'death',
+      'pov',
+      'people',
+      'society',
+      'government',
+      'history',
+      'ai',
+      'technology'
+    ];
+
+    const unsafeTerms = [
+      'how to kill',
+      'how to hurt',
+      'terrorist',
+      'bomb making',
+      'genocide is good',
+      'hate all',
+      'attack a group',
+      'self harm'
+    ];
+
+    let selectedTopic = '';
+
+    function validateTopic(topic) {
+      const cleaned = topic.trim().toLowerCase();
+      const wordCount = cleaned.split(/\s+/).filter(Boolean).length;
+
+      if (!cleaned) {
+        return {
+          allowed: false,
+          message: 'Please select or write a topic first.'
+        };
+      }
+
+      if (unsafeTerms.some(term => cleaned.includes(term))) {
+        return {
+          allowed: false,
+          message: 'This topic is blocked because it may lead to harmful or unsafe discussion.'
+        };
+      }
+
+      if (broadTopics.includes(cleaned) || wordCount < 5) {
+        return {
+          allowed: false,
+          message: 'This topic is too broad. Try turning it into a clear question, such as “Should AI be used in military decision-making?”'
+        };
+      }
+
+      if (!cleaned.includes('should') && !cleaned.includes('?')) {
+        return {
+          allowed: false,
+          message: 'Make the topic debatable by phrasing it as a question, preferably starting with “Should...”'
+        };
+      }
+
+      if (wordCount > 28) {
+        return {
+          allowed: false,
+          message: 'This topic is too long. Keep it focused enough for one debate session.'
+        };
+      }
+
+      return {
+        allowed: true,
+        message: 'Topic approved. You can enter the debate.'
+      };
+    }
+
+    function updateValidation(topic) {
+      const result = validateTopic(topic);
+      topicStatus.textContent = result.message;
+
+      if (result.allowed) {
+        warningBox.style.display = 'none';
+        startButton.disabled = false;
+        startButton.style.opacity = '1';
+      } else {
+        warningBox.textContent = result.message;
+        warningBox.style.display = topic ? 'block' : 'none';
+        startButton.disabled = true;
+        startButton.style.opacity = '0.55';
+      }
+
+      return result.allowed;
+    }
+
+    topicButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        topicButtons.forEach(item => item.classList.remove('selected'));
+        button.classList.add('selected');
+        customTopic.value = '';
+        selectedTopic = button.textContent.trim();
+        updateValidation(selectedTopic);
+      });
+    });
+
+    customTopic.addEventListener('input', () => {
+      topicButtons.forEach(item => item.classList.remove('selected'));
+      selectedTopic = customTopic.value.trim();
+      updateValidation(selectedTopic);
+    });
+
+    startButton.addEventListener('click', () => {
+      const topic = customTopic.value.trim() || selectedTopic;
+      const allowed = updateValidation(topic);
+
+      if (!allowed) return;
+
+      alert(`Debate room created for: ${topic}`);
+    });
+
+    updateValidation('');
+  </script>
+</body>
+</html>
