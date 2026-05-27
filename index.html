@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Debate Arena</title>
+  <title>DebateAI</title>
   <style>
     * {
       box-sizing: border-box;
@@ -11,11 +11,27 @@
       padding: 0;
     }
 
+    :root {
+      --brand: #8b5cf6;
+      --brand-soft: rgba(139, 92, 246, 0.18);
+      --brand-border: rgba(139, 92, 246, 0.42);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --subtle: #94a3b8;
+      --panel: rgba(15, 23, 42, 0.84);
+      --panel-border: rgba(148, 163, 184, 0.18);
+    }
+
     body {
       min-height: 100vh;
       font-family: Inter, Arial, sans-serif;
       background: radial-gradient(circle at top, #1f2937 0%, #0b0f19 45%, #05070d 100%);
-      color: #f8fafc;
+      color: var(--text);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
     .page {
@@ -34,21 +50,38 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
+      gap: 12px;
+      font-size: 1.08rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
     }
 
     .logo-mark {
-      width: 34px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #818cf8, #22d3ee);
-      color: #020617;
-      font-weight: 900;
+      position: relative;
+      width: 38px;
+      height: 38px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #a78bfa, #8b5cf6 45%, #22d3ee);
+      box-shadow: 0 14px 34px rgba(139, 92, 246, 0.34);
+    }
+
+    .logo-mark::before,
+    .logo-mark::after {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      border-radius: 50% 45% 50% 45%;
+      transform: rotate(28deg);
+    }
+
+    .logo-mark::after {
+      transform: rotate(-28deg);
+    }
+
+    .logo-text {
+      color: var(--brand);
+      text-shadow: 0 0 28px rgba(139, 92, 246, 0.38);
     }
 
     .nav-actions {
@@ -64,21 +97,25 @@
       cursor: pointer;
       font: inherit;
       border-radius: 999px;
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
     }
 
     .ghost-button {
       padding: 10px 16px;
       background: rgba(148, 163, 184, 0.08);
-      color: #cbd5e1;
+      color: var(--muted);
       border: 1px solid rgba(148, 163, 184, 0.18);
     }
 
     .primary-button {
-      padding: 12px 18px;
-      background: #f8fafc;
-      color: #020617;
-      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 20px;
+      background: var(--brand);
+      color: #ffffff;
+      font-weight: 800;
+      box-shadow: 0 18px 42px rgba(139, 92, 246, 0.32);
     }
 
     .ghost-button:hover,
@@ -87,45 +124,55 @@
       transform: translateY(-1px);
     }
 
+    .primary-button:hover {
+      box-shadow: 0 22px 52px rgba(139, 92, 246, 0.42);
+    }
+
     .hero {
       display: grid;
-      grid-template-columns: 1fr 420px;
+      grid-template-columns: 1fr;
       gap: 36px;
       align-items: start;
     }
 
     .hero-copy h1 {
-      max-width: 720px;
-      font-size: clamp(2.6rem, 7vw, 5.7rem);
-      line-height: 0.92;
+      max-width: 850px;
+      font-size: clamp(2.8rem, 7vw, 6.1rem);
+      line-height: 0.93;
       letter-spacing: -0.08em;
       margin-bottom: 24px;
+      animation: riseIn 0.85s ease both;
+    }
+
+    .hero-copy h1 .highlight {
+      color: var(--brand);
+      text-shadow: 0 0 34px rgba(139, 92, 246, 0.45);
     }
 
     .hero-copy p {
-      max-width: 630px;
-      color: #cbd5e1;
+      max-width: 650px;
+      color: var(--muted);
       font-size: 1.08rem;
       line-height: 1.8;
       margin-bottom: 28px;
+      animation: fadeIn 0.95s ease 0.12s both;
     }
 
-    .hero-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+    .hero-action {
       margin-bottom: 34px;
+      animation: fadeIn 0.95s ease 0.2s both;
     }
 
     .stat-row {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
-      max-width: 680px;
+      max-width: 760px;
+      animation: fadeIn 0.95s ease 0.3s both;
     }
 
     .stat-card {
-      padding: 18px;
+      padding: 20px;
       border-radius: 22px;
       background: rgba(15, 23, 42, 0.72);
       border: 1px solid rgba(148, 163, 184, 0.16);
@@ -134,19 +181,22 @@
 
     .stat-card strong {
       display: block;
-      font-size: 1.6rem;
-      margin-bottom: 6px;
+      font-size: 1.55rem;
+      margin-bottom: 7px;
+      color: var(--brand);
+      letter-spacing: -0.04em;
     }
 
     .stat-card span {
-      color: #94a3b8;
-      font-size: 0.9rem;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.5;
     }
 
     .panel {
       border-radius: 30px;
-      background: rgba(15, 23, 42, 0.84);
-      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
       box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
       overflow: hidden;
     }
@@ -157,7 +207,7 @@
     }
 
     .panel-header p {
-      color: #94a3b8;
+      color: var(--subtle);
       margin-top: 6px;
       line-height: 1.5;
       font-size: 0.92rem;
@@ -178,14 +228,14 @@
       border-radius: 999px;
       border: 1px solid rgba(148, 163, 184, 0.15);
       background: rgba(148, 163, 184, 0.08);
-      color: #cbd5e1;
+      color: var(--muted);
       font-size: 0.82rem;
     }
 
     .tab.active {
-      background: rgba(129, 140, 248, 0.18);
-      color: #e0e7ff;
-      border-color: rgba(129, 140, 248, 0.4);
+      background: var(--brand-soft);
+      color: #ede9fe;
+      border-color: var(--brand-border);
     }
 
     .topic-list {
@@ -207,8 +257,8 @@
 
     .topic-button:hover,
     .topic-button.selected {
-      background: rgba(129, 140, 248, 0.16);
-      border-color: rgba(129, 140, 248, 0.48);
+      background: var(--brand-soft);
+      border-color: var(--brand-border);
     }
 
     .custom-box {
@@ -224,26 +274,31 @@
       margin-bottom: 10px;
     }
 
-    textarea {
+    textarea,
+    select {
       width: 100%;
-      min-height: 92px;
-      resize: vertical;
       padding: 14px;
       border-radius: 18px;
       border: 1px solid rgba(148, 163, 184, 0.2);
       background: rgba(2, 6, 23, 0.46);
-      color: #f8fafc;
+      color: var(--text);
       font: inherit;
       outline: none;
     }
 
-    textarea:focus {
-      border-color: rgba(34, 211, 238, 0.58);
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    textarea:focus,
+    select:focus {
+      border-color: rgba(139, 92, 246, 0.7);
     }
 
     .helper {
       margin-top: 8px;
-      color: #94a3b8;
+      color: var(--subtle);
       font-size: 0.82rem;
       line-height: 1.5;
     }
@@ -269,11 +324,12 @@
     }
 
     .difficulty {
-      color: #94a3b8;
+      color: var(--subtle);
       font-size: 0.84rem;
     }
 
-    .chat-preview {
+    .chat-preview,
+    .info-grid {
       margin-top: 42px;
       display: grid;
       grid-template-columns: 340px 1fr;
@@ -281,7 +337,8 @@
     }
 
     .coach-card,
-    .rules-card {
+    .rules-card,
+    .info-card {
       padding: 22px;
       border-radius: 28px;
       background: rgba(15, 23, 42, 0.76);
@@ -289,14 +346,16 @@
     }
 
     .coach-card h2,
-    .rules-card h2 {
+    .rules-card h2,
+    .info-card h2 {
       margin-bottom: 12px;
       font-size: 1.1rem;
     }
 
     .coach-card p,
-    .rules-card li {
-      color: #cbd5e1;
+    .rules-card li,
+    .info-card p {
+      color: var(--muted);
       line-height: 1.65;
       font-size: 0.94rem;
     }
@@ -307,9 +366,61 @@
       gap: 8px;
     }
 
+    .section-page {
+      display: none;
+    }
+
+    .section-page.active,
+    .home-page.active {
+      display: block;
+    }
+
+    .home-page.hidden {
+      display: none;
+    }
+
+    .page-title {
+      max-width: 760px;
+      margin-bottom: 28px;
+    }
+
+    .page-title h1 {
+      font-size: clamp(2.2rem, 5vw, 4.2rem);
+      letter-spacing: -0.06em;
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+
+    .page-title p {
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    @keyframes riseIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     @media (max-width: 900px) {
-      .hero,
-      .chat-preview {
+      .chat-preview,
+      .info-grid {
         grid-template-columns: 1fr;
       }
 
@@ -324,14 +435,19 @@
 
     @media (max-width: 520px) {
       .nav-actions {
-        display: none;
+        gap: 8px;
+      }
+
+      .ghost-button,
+      .primary-button {
+        padding: 10px 12px;
+        font-size: 0.9rem;
       }
 
       .hero-copy h1 {
         font-size: 3rem;
       }
 
-      .hero-buttons,
       .start-row {
         flex-direction: column;
         align-items: stretch;
@@ -342,41 +458,78 @@
 <body>
   <main class="page">
     <nav class="navbar">
-      <div class="logo">
-        <div class="logo-mark">D</div>
-        <span>Debate Arena</span>
-      </div>
+      <a class="logo" href="#home" data-page="home">
+        <div class="logo-mark" aria-hidden="true"></div>
+        <span class="logo-text">DebateAI</span>
+      </a>
       <div class="nav-actions">
-        <button class="ghost-button">How it works</button>
-        <button class="primary-button">Start practice</button>
+        <a class="ghost-button" href="#how-it-works" data-page="how-it-works">How it works</a>
+        <a class="primary-button" href="#practice" data-page="practice">Start practice</a>
       </div>
     </nav>
 
-    <section class="hero">
-      <div class="hero-copy">
-        <h1>Train your argument against an AI opponent.</h1>
-        <p>
-          Pick a focused debate topic, choose a side, and practise responding to rebuttals. The AI coach tests your reasoning, spots weak claims, and helps you build stronger arguments.
-        </p>
-        <div class="hero-buttons">
-          <button class="primary-button">Create debate room</button>
-          <button class="ghost-button">View sample debate</button>
-        </div>
+    <section class="home-page active" id="homePage">
+      <section class="hero">
+        <div class="hero-copy">
+          <h1>Train your argument against an <span class="highlight">AI opponent</span>.</h1>
+          <p>
+            Choose a topic, set the difficulty, and test whether your argument can stand up to a challenging AI debate opponent.
+          </p>
 
-        <div class="stat-row">
-          <div class="stat-card">
-            <strong>3</strong>
-            <span>Rounds per debate</span>
+          <div class="hero-action">
+            <a class="primary-button" href="#practice" data-page="practice">Start practice</a>
           </div>
-          <div class="stat-card">
-            <strong>10</strong>
-            <span>Point feedback score</span>
-          </div>
-          <div class="stat-card">
-            <strong>AI</strong>
-            <span>Opponent and coach</span>
+
+          <div class="stat-row">
+            <div class="stat-card">
+              <strong>Argument</strong>
+              <span>The AI evaluates the strength, logic, and clarity of how you build your case.</span>
+            </div>
+            <div class="stat-card">
+              <strong>Feedback</strong>
+              <span>Receive a score out of 10 with clear notes on what worked and what needs improvement.</span>
+            </div>
+            <div class="stat-card">
+              <strong>Difficulty</strong>
+              <span>Select the challenge level so each debate feels realistic, focused, and suitable for practice.</span>
+            </div>
           </div>
         </div>
+      </section>
+    </section>
+
+    <section class="section-page" id="howPage">
+      <div class="page-title">
+        <h1>How DebateAI works</h1>
+        <p>
+          DebateAI is designed to help you practise structured argumentation. You choose a debate prompt, select a difficulty, take a side, and respond across multiple rounds before receiving feedback.
+        </p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <h2>1. Choose a focused topic</h2>
+          <p>The app checks whether your topic is specific enough for a proper debate. Vague prompts are blocked so the debate stays useful.</p>
+        </div>
+        <div class="info-card">
+          <h2>2. Pick your difficulty</h2>
+          <p>Easy gives lighter rebuttals, medium gives balanced challenges, and hard pushes back with stronger counter-arguments.</p>
+        </div>
+        <div class="info-card">
+          <h2>3. Debate the AI</h2>
+          <p>You present your point, the AI challenges it, and you defend or refine your argument over a few rounds.</p>
+        </div>
+        <div class="info-card">
+          <h2>4. Receive feedback</h2>
+          <p>The AI gives a score out of 10 and breaks down your logic, evidence, clarity, persuasion, and weaknesses.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-page" id="practicePage">
+      <div class="page-title">
+        <h1>Start practice</h1>
+        <p>Select from popular debate prompts or write your own. The topic must be focused, safe, and clear enough for one debate session.</p>
       </div>
 
       <aside class="panel">
@@ -401,6 +554,15 @@
           </div>
 
           <div class="custom-box">
+            <label for="difficultySelect">Choose your difficulty</label>
+            <select id="difficultySelect">
+              <option value="easy">Easy - lighter rebuttals</option>
+              <option value="medium" selected>Medium - balanced challenge</option>
+              <option value="hard">Hard - stronger counter-arguments</option>
+            </select>
+
+            <br /><br />
+
             <label for="customTopic">Write your own topic</label>
             <textarea id="customTopic" placeholder="Example: Should schools ban phones during lesson time?"></textarea>
             <p class="helper">Good topics are specific, balanced, debatable, and answerable in one debate session.</p>
@@ -413,34 +575,40 @@
           </div>
         </div>
       </aside>
-    </section>
 
-    <section class="chat-preview">
-      <div class="coach-card">
-        <h2>Debate flow</h2>
-        <p>
-          Round 1: Opening argument. Round 2: AI rebuttal. Round 3: final defence. After that, the AI gives a score for logic, evidence, clarity, and persuasion.
-        </p>
-      </div>
+      <section class="chat-preview">
+        <div class="coach-card">
+          <h2>Debate flow</h2>
+          <p>
+            Round 1: opening argument. Round 2: AI rebuttal. Round 3: final defence. After that, the AI gives a score for logic, evidence, clarity, and persuasion.
+          </p>
+        </div>
 
-      <div class="rules-card">
-        <h2>Topic safety rules</h2>
-        <ul>
-          <li>Blocked if the topic is too broad, such as “war”, “politics”, or “life”.</li>
-          <li>Blocked if it asks for harmful, hateful, violent, or illegal advice.</li>
-          <li>Blocked if it targets a protected group or encourages harassment.</li>
-          <li>Allowed if it is framed as a focused policy, ethics, school, technology, or society debate.</li>
-        </ul>
-      </div>
+        <div class="rules-card">
+          <h2>Topic safety rules</h2>
+          <ul>
+            <li>Blocked if the topic is too broad, such as “war”, “politics”, or “life”.</li>
+            <li>Blocked if it asks for harmful, hateful, violent, or illegal advice.</li>
+            <li>Blocked if it targets a protected group or encourages harassment.</li>
+            <li>Allowed if it is framed as a focused policy, ethics, school, technology, or society debate.</li>
+          </ul>
+        </div>
+      </section>
     </section>
   </main>
 
   <script>
+    const homePage = document.getElementById('homePage');
+    const howPage = document.getElementById('howPage');
+    const practicePage = document.getElementById('practicePage');
+    const pageLinks = document.querySelectorAll('[data-page]');
+
     const topicButtons = document.querySelectorAll('.topic-button');
     const customTopic = document.getElementById('customTopic');
     const warningBox = document.getElementById('warningBox');
     const topicStatus = document.getElementById('topicStatus');
     const startButton = document.getElementById('startButton');
+    const difficultySelect = document.getElementById('difficultySelect');
 
     const broadTopics = [
       'war',
@@ -469,6 +637,22 @@
     ];
 
     let selectedTopic = '';
+
+    function showPage(pageName) {
+      homePage.classList.toggle('active', pageName === 'home');
+      homePage.classList.toggle('hidden', pageName !== 'home');
+      howPage.classList.toggle('active', pageName === 'how-it-works');
+      practicePage.classList.toggle('active', pageName === 'practice');
+    }
+
+    pageLinks.forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const pageName = link.dataset.page;
+        window.location.hash = pageName;
+        showPage(pageName);
+      });
+    });
 
     function validateTopic(topic) {
       const cleaned = topic.trim().toLowerCase();
@@ -555,9 +739,11 @@
 
       if (!allowed) return;
 
-      alert(`Debate room created for: ${topic}`);
+      alert(`Debate room created for: ${topic}\nDifficulty: ${difficultySelect.value}`);
     });
 
+    const initialPage = window.location.hash.replace('#', '') || 'home';
+    showPage(initialPage);
     updateValidation('');
   </script>
 </body>
