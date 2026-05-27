@@ -5,16 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DebateAI</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --brand: #8b5cf6;
       --brand-soft: rgba(139, 92, 246, 0.18);
       --brand-border: rgba(139, 92, 246, 0.42);
+      --cyan: #22d3ee;
+      --pink: #f472b6;
+      --amber: #f59e0b;
+      --green: #34d399;
+      --blue: #60a5fa;
       --text: #f8fafc;
       --muted: #cbd5e1;
       --subtle: #94a3b8;
@@ -25,36 +26,23 @@
     body {
       min-height: 100vh;
       font-family: Inter, Arial, sans-serif;
-      background: radial-gradient(circle at top, #1f2937 0%, #0b0f19 45%, #05070d 100%);
+      background: radial-gradient(circle at top left, rgba(139, 92, 246, 0.22), transparent 34%), radial-gradient(circle at top right, rgba(34, 211, 238, 0.14), transparent 32%), #05070d;
       color: var(--text);
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    a { color: inherit; text-decoration: none; }
 
-    .page {
-      width: min(1120px, 92%);
-      margin: 0 auto;
-      padding: 48px 0;
-    }
+    .page { width: min(1160px, 92%); margin: 0 auto; padding: 42px 0 56px; }
 
     .navbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 64px;
+      animation: fadeIn 0.7s ease both;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 1.08rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
+    .logo { display: flex; align-items: center; gap: 12px; font-size: 1.08rem; font-weight: 800; letter-spacing: -0.03em; }
 
     .logo-mark {
       position: relative;
@@ -65,8 +53,7 @@
       box-shadow: 0 14px 34px rgba(139, 92, 246, 0.34);
     }
 
-    .logo-mark::before,
-    .logo-mark::after {
+    .logo-mark::before, .logo-mark::after {
       content: "";
       position: absolute;
       inset: 9px;
@@ -75,36 +62,25 @@
       transform: rotate(28deg);
     }
 
-    .logo-mark::after {
-      transform: rotate(-28deg);
+    .logo-mark::after { transform: rotate(-28deg); }
+    .logo-text { color: var(--brand); text-shadow: 0 0 28px rgba(139, 92, 246, 0.38); }
+
+    .nav-actions { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+
+    .nav-link {
+      color: var(--muted);
+      font-weight: 700;
+      transition: color 0.18s ease, transform 0.18s ease;
     }
 
-    .logo-text {
-      color: var(--brand);
-      text-shadow: 0 0 28px rgba(139, 92, 246, 0.38);
-    }
+    .nav-link:hover { color: var(--brand); transform: translateY(-1px); }
 
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .ghost-button,
-    .primary-button,
-    .topic-button {
+    .ghost-button, .primary-button, .topic-button {
       border: 0;
       cursor: pointer;
       font: inherit;
       border-radius: 999px;
       transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
-    }
-
-    .ghost-button {
-      padding: 10px 16px;
-      background: rgba(148, 163, 184, 0.08);
-      color: var(--muted);
-      border: 1px solid rgba(148, 163, 184, 0.18);
     }
 
     .primary-button {
@@ -118,38 +94,31 @@
       box-shadow: 0 18px 42px rgba(139, 92, 246, 0.32);
     }
 
-    .ghost-button:hover,
-    .primary-button:hover,
-    .topic-button:hover {
-      transform: translateY(-1px);
-    }
+    .primary-button:hover, .topic-button:hover { transform: translateY(-1px); }
+    .primary-button:hover { box-shadow: 0 22px 52px rgba(139, 92, 246, 0.42); }
 
-    .primary-button:hover {
-      box-shadow: 0 22px 52px rgba(139, 92, 246, 0.42);
-    }
-
-    .hero {
+    .home-layout {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 36px;
-      align-items: start;
+      grid-template-columns: minmax(0, 1fr) 390px;
+      gap: 34px;
+      align-items: stretch;
     }
 
-    .hero-copy h1 {
-      max-width: 850px;
-      font-size: clamp(2.8rem, 7vw, 6.1rem);
-      line-height: 0.93;
-      letter-spacing: -0.08em;
-      margin-bottom: 24px;
+    .hero-copy h1, .page-title h1 {
       animation: riseIn 0.85s ease both;
     }
 
-    .hero-copy h1 .highlight {
-      color: var(--brand);
-      text-shadow: 0 0 34px rgba(139, 92, 246, 0.45);
+    .hero-copy h1 {
+      max-width: 760px;
+      font-size: clamp(2.8rem, 7vw, 5.8rem);
+      line-height: 0.93;
+      letter-spacing: -0.08em;
+      margin-bottom: 24px;
     }
 
-    .hero-copy p {
+    .hero-copy h1 .highlight, .purple-word { color: var(--brand); text-shadow: 0 0 34px rgba(139, 92, 246, 0.45); }
+
+    .hero-copy p, .page-title p {
       max-width: 650px;
       color: var(--muted);
       font-size: 1.08rem;
@@ -158,10 +127,7 @@
       animation: fadeIn 0.95s ease 0.12s both;
     }
 
-    .hero-action {
-      margin-bottom: 34px;
-      animation: fadeIn 0.95s ease 0.2s both;
-    }
+    .hero-action { margin-bottom: 34px; animation: fadeIn 0.95s ease 0.2s both; }
 
     .stat-row {
       display: grid;
@@ -171,13 +137,22 @@
       animation: fadeIn 0.95s ease 0.3s both;
     }
 
-    .stat-card {
-      padding: 20px;
-      border-radius: 22px;
-      background: rgba(15, 23, 42, 0.72);
+    .bubble, .stat-card, .info-card, .coach-card, .rules-card {
+      border-radius: 24px;
+      background: rgba(15, 23, 42, 0.74);
       border: 1px solid rgba(148, 163, 184, 0.16);
       backdrop-filter: blur(18px);
+      transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
     }
+
+    .pop-float { animation: bubbleIn 0.8s ease both; }
+    .pop-float:hover, .pop-float.frozen { transform: translateY(-6px) scale(1.025); box-shadow: 0 24px 70px rgba(139, 92, 246, 0.24); }
+
+    .stat-card {
+      padding: 20px;
+    }
+
+    .stat-card:hover { border-color: var(--brand); box-shadow: 0 20px 58px rgba(139, 92, 246, 0.24); }
 
     .stat-card strong {
       display: block;
@@ -187,11 +162,40 @@
       letter-spacing: -0.04em;
     }
 
-    .stat-card span {
-      color: var(--muted);
-      font-size: 0.94rem;
-      line-height: 1.5;
+    .stat-card span { color: var(--muted); font-size: 0.94rem; line-height: 1.5; }
+
+    .main-side-card {
+      padding: 22px;
+      min-height: 100%;
+      animation: bubbleIn 0.85s ease 0.24s both;
     }
+
+    .main-side-card h2 { font-size: 1.35rem; margin-bottom: 12px; letter-spacing: -0.04em; }
+    .main-side-card p { color: var(--muted); line-height: 1.65; font-size: 0.94rem; }
+
+    .mini-bubbles { display: grid; gap: 12px; margin-top: 18px; }
+    .mini-bubble { padding: 16px; border-radius: 18px; background: rgba(2, 6, 23, 0.38); border: 1px solid rgba(148, 163, 184, 0.14); }
+    .mini-bubble strong { display: block; color: var(--brand); margin-bottom: 6px; }
+    .mini-bubble ul { padding-left: 18px; color: var(--muted); line-height: 1.55; font-size: 0.9rem; }
+
+    .section-page { display: none; }
+    .section-page.active, .home-page.active { display: block; }
+    .home-page.hidden { display: none; }
+
+    .page-title { max-width: 780px; margin-bottom: 28px; }
+    .page-title h1 { font-size: clamp(2.2rem, 5vw, 4.2rem); letter-spacing: -0.06em; line-height: 1; margin-bottom: 14px; }
+
+    .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .info-card { min-height: 245px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; }
+    .info-card h2 { font-size: 1.15rem; line-height: 1.25; margin-bottom: 14px; }
+    .info-card p { color: var(--muted); line-height: 1.65; font-size: 0.94rem; }
+    .info-card[data-colour="purple"] { --card-colour: var(--brand); }
+    .info-card[data-colour="cyan"] { --card-colour: var(--cyan); }
+    .info-card[data-colour="pink"] { --card-colour: var(--pink); }
+    .info-card[data-colour="green"] { --card-colour: var(--green); }
+    .info-card { border-color: color-mix(in srgb, var(--card-colour, var(--brand)) 36%, transparent); }
+    .info-card h2 { color: var(--card-colour, var(--brand)); }
+    .info-card:hover { border-color: var(--card-colour, var(--brand)); box-shadow: 0 22px 60px color-mix(in srgb, var(--card-colour, var(--brand)) 24%, transparent); }
 
     .panel {
       border-radius: 30px;
@@ -199,51 +203,20 @@
       border: 1px solid var(--panel-border);
       box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
       overflow: hidden;
+      animation: bubbleIn 0.85s ease 0.16s both;
     }
 
-    .panel-header {
-      padding: 22px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
-    }
+    .panel:hover { border-color: var(--brand-border); box-shadow: 0 24px 80px rgba(139, 92, 246, 0.16); }
+    .panel-header { padding: 22px; border-bottom: 1px solid rgba(148, 163, 184, 0.14); }
+    .panel-header p { color: var(--subtle); margin-top: 6px; line-height: 1.5; font-size: 0.92rem; }
+    .question-note { margin-top: 12px; color: #ede9fe; font-weight: 900; font-size: 1rem; letter-spacing: -0.02em; }
+    .panel-body { padding: 22px; }
 
-    .panel-header p {
-      color: var(--subtle);
-      margin-top: 6px;
-      line-height: 1.5;
-      font-size: 0.92rem;
-    }
+    .tab-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .tab { padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(148, 163, 184, 0.15); background: rgba(148, 163, 184, 0.08); color: var(--muted); font-size: 0.82rem; cursor: pointer; }
+    .tab.active { background: var(--tab-soft, var(--brand-soft)); color: #fff; border-color: var(--tab-colour, var(--brand)); }
 
-    .panel-body {
-      padding: 22px;
-    }
-
-    .tab-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-
-    .tab {
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.15);
-      background: rgba(148, 163, 184, 0.08);
-      color: var(--muted);
-      font-size: 0.82rem;
-    }
-
-    .tab.active {
-      background: var(--brand-soft);
-      color: #ede9fe;
-      border-color: var(--brand-border);
-    }
-
-    .topic-list {
-      display: grid;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-
+    .topic-list { display: grid; gap: 10px; margin-bottom: 24px; }
     .topic-button {
       width: 100%;
       text-align: left;
@@ -254,28 +227,12 @@
       border-radius: 18px;
       line-height: 1.45;
     }
+    .topic-button:hover, .topic-button.selected { background: var(--tab-soft, var(--brand-soft)); border-color: var(--tab-colour, var(--brand)); box-shadow: 0 16px 40px color-mix(in srgb, var(--tab-colour, var(--brand)) 18%, transparent); }
 
-    .topic-button:hover,
-    .topic-button.selected {
-      background: var(--brand-soft);
-      border-color: var(--brand-border);
-    }
+    .custom-box { padding-top: 20px; border-top: 1px solid rgba(148, 163, 184, 0.14); }
+    label { display: block; color: #e2e8f0; font-size: 1.12rem; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.03em; }
 
-    .custom-box {
-      padding-top: 20px;
-      border-top: 1px solid rgba(148, 163, 184, 0.14);
-    }
-
-    label {
-      display: block;
-      color: #e2e8f0;
-      font-size: 0.92rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    textarea,
-    select {
+    textarea, select {
       width: 100%;
       padding: 14px;
       border-radius: 18px;
@@ -285,173 +242,33 @@
       font: inherit;
       outline: none;
     }
+    textarea { min-height: 92px; resize: vertical; }
+    textarea:focus, select:focus { border-color: var(--tab-colour, var(--brand)); }
+    .helper { margin-top: 8px; color: var(--subtle); font-size: 0.84rem; line-height: 1.5; }
+    .warning { display: none; margin-top: 10px; padding: 12px 14px; border-radius: 16px; background: rgba(248, 113, 113, 0.12); color: #fecaca; border: 1px solid rgba(248, 113, 113, 0.22); font-size: 0.86rem; line-height: 1.5; }
+    .start-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 18px; }
+    .difficulty { color: var(--subtle); font-size: 0.84rem; }
 
-    textarea {
-      min-height: 92px;
-      resize: vertical;
+    .debate-room { display: none; margin-top: 28px; padding: 22px; border-radius: 28px; background: rgba(15, 23, 42, 0.76); border: 1px solid var(--brand-border); animation: bubbleIn 0.5s ease both; }
+    .debate-room.active { display: block; }
+    .debate-room h2 { color: var(--brand); margin-bottom: 10px; }
+    .debate-room p { color: var(--muted); line-height: 1.65; }
+
+    @keyframes riseIn { from { opacity: 0; transform: translateY(18px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes bubbleIn { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    @media (max-width: 980px) {
+      .home-layout { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: repeat(2, 1fr); }
+      .navbar { margin-bottom: 42px; }
+      .stat-row { grid-template-columns: 1fr; }
     }
 
-    textarea:focus,
-    select:focus {
-      border-color: rgba(139, 92, 246, 0.7);
-    }
-
-    .helper {
-      margin-top: 8px;
-      color: var(--subtle);
-      font-size: 0.82rem;
-      line-height: 1.5;
-    }
-
-    .warning {
-      display: none;
-      margin-top: 10px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: rgba(248, 113, 113, 0.12);
-      color: #fecaca;
-      border: 1px solid rgba(248, 113, 113, 0.22);
-      font-size: 0.86rem;
-      line-height: 1.5;
-    }
-
-    .start-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin-top: 18px;
-    }
-
-    .difficulty {
-      color: var(--subtle);
-      font-size: 0.84rem;
-    }
-
-    .chat-preview,
-    .info-grid {
-      margin-top: 42px;
-      display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 18px;
-    }
-
-    .coach-card,
-    .rules-card,
-    .info-card {
-      padding: 22px;
-      border-radius: 28px;
-      background: rgba(15, 23, 42, 0.76);
-      border: 1px solid rgba(148, 163, 184, 0.16);
-    }
-
-    .coach-card h2,
-    .rules-card h2,
-    .info-card h2 {
-      margin-bottom: 12px;
-      font-size: 1.1rem;
-    }
-
-    .coach-card p,
-    .rules-card li,
-    .info-card p {
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 0.94rem;
-    }
-
-    .rules-card ul {
-      padding-left: 20px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .section-page {
-      display: none;
-    }
-
-    .section-page.active,
-    .home-page.active {
-      display: block;
-    }
-
-    .home-page.hidden {
-      display: none;
-    }
-
-    .page-title {
-      max-width: 760px;
-      margin-bottom: 28px;
-    }
-
-    .page-title h1 {
-      font-size: clamp(2.2rem, 5vw, 4.2rem);
-      letter-spacing: -0.06em;
-      line-height: 1;
-      margin-bottom: 14px;
-    }
-
-    .page-title p {
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    @keyframes riseIn {
-      from {
-        opacity: 0;
-        transform: translateY(18px) scale(0.98);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 900px) {
-      .chat-preview,
-      .info-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .navbar {
-        margin-bottom: 42px;
-      }
-
-      .stat-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .nav-actions {
-        gap: 8px;
-      }
-
-      .ghost-button,
-      .primary-button {
-        padding: 10px 12px;
-        font-size: 0.9rem;
-      }
-
-      .hero-copy h1 {
-        font-size: 3rem;
-      }
-
-      .start-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
+    @media (max-width: 560px) {
+      .info-grid { grid-template-columns: 1fr; }
+      .hero-copy h1 { font-size: 3rem; }
+      .start-row { flex-direction: column; align-items: stretch; }
     }
   </style>
 </head>
@@ -463,95 +280,67 @@
         <span class="logo-text">DebateAI</span>
       </a>
       <div class="nav-actions">
-        <a class="ghost-button" href="#how-it-works" data-page="how-it-works">How it works</a>
-        <a class="primary-button" href="#practice" data-page="practice">Start practice</a>
+        <a class="nav-link pop-float" href="#how-it-works" data-page="how-it-works" id="howNav">How it works</a>
       </div>
     </nav>
 
     <section class="home-page active" id="homePage">
-      <section class="hero">
-        <div class="hero-copy">
+      <div class="home-layout">
+        <section class="hero-copy">
           <h1>Train your argument against an <span class="highlight">AI opponent</span>.</h1>
-          <p>
-            Choose a topic, set the difficulty, and test whether your argument can stand up to a challenging AI debate opponent.
-          </p>
-
-          <div class="hero-action">
-            <a class="primary-button" href="#practice" data-page="practice">Start practice</a>
-          </div>
-
+          <p>Choose a topic, set the difficulty, and test whether your argument can stand up to a challenging AI debate opponent.</p>
+          <div class="hero-action"><a class="primary-button" href="#practice" data-page="practice">Start practice</a></div>
           <div class="stat-row">
-            <div class="stat-card">
-              <strong>Argument</strong>
-              <span>The AI evaluates the strength, logic, and clarity of how you build your case.</span>
-            </div>
-            <div class="stat-card">
-              <strong>Feedback</strong>
-              <span>Receive a score out of 10 with clear notes on what worked and what needs improvement.</span>
-            </div>
-            <div class="stat-card">
-              <strong>Difficulty</strong>
-              <span>Select the challenge level so each debate feels realistic, focused, and suitable for practice.</span>
-            </div>
+            <div class="stat-card pop-float"><strong>Argument</strong><span>The AI evaluates the strength, logic, and clarity of how you build your case.</span></div>
+            <div class="stat-card pop-float"><strong>Feedback</strong><span>Receive a score out of 10 with clear notes on what worked and what needs improvement.</span></div>
+            <div class="stat-card pop-float"><strong>Difficulty</strong><span>Select the challenge level so each debate feels realistic, focused, and suitable for practice.</span></div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <aside class="bubble main-side-card pop-float">
+          <h2>Before you debate</h2>
+          <p>DebateAI keeps each practice session structured, focused, and safe so your argument can be tested properly.</p>
+          <div class="mini-bubbles">
+            <div class="mini-bubble"><strong>Debate flow</strong><p>Opening argument, AI rebuttal, final defence, then feedback.</p></div>
+            <div class="mini-bubble"><strong>Topic safety rules</strong><ul><li>No vague one-word topics.</li><li>No harmful or hateful prompts.</li><li>No harassment or illegal advice.</li></ul></div>
+          </div>
+        </aside>
+      </div>
     </section>
 
     <section class="section-page" id="howPage">
       <div class="page-title">
-        <h1>How DebateAI works</h1>
-        <p>
-          DebateAI is designed to help you practise structured argumentation. You choose a debate prompt, select a difficulty, take a side, and respond across multiple rounds before receiving feedback.
-        </p>
+        <h1>How DebateAI <span class="purple-word">works</span></h1>
+        <p>DebateAI helps you practise structured argumentation by guiding you from topic selection to rebuttal practice and feedback.</p>
       </div>
-
       <div class="info-grid">
-        <div class="info-card">
-          <h2>1. Choose a focused topic</h2>
-          <p>The app checks whether your topic is specific enough for a proper debate. Vague prompts are blocked so the debate stays useful.</p>
-        </div>
-        <div class="info-card">
-          <h2>2. Pick your difficulty</h2>
-          <p>Easy gives lighter rebuttals, medium gives balanced challenges, and hard pushes back with stronger counter-arguments.</p>
-        </div>
-        <div class="info-card">
-          <h2>3. Debate the AI</h2>
-          <p>You present your point, the AI challenges it, and you defend or refine your argument over a few rounds.</p>
-        </div>
-        <div class="info-card">
-          <h2>4. Receive feedback</h2>
-          <p>The AI gives a score out of 10 and breaks down your logic, evidence, clarity, persuasion, and weaknesses.</p>
-        </div>
+        <div class="info-card pop-float" data-colour="purple"><h2>1. Choose a focused topic</h2><p>The app checks whether your topic is specific enough for a proper debate. Vague prompts are blocked so the debate stays useful.</p></div>
+        <div class="info-card pop-float" data-colour="cyan"><h2>2. Pick your difficulty</h2><p>Easy gives lighter rebuttals, medium gives balanced challenges, and hard pushes back with stronger counter-arguments.</p></div>
+        <div class="info-card pop-float" data-colour="pink"><h2>3. Debate the AI</h2><p>You present your point, the AI challenges it, and you defend or refine your argument over a few rounds.</p></div>
+        <div class="info-card pop-float" data-colour="green"><h2>4. Receive feedback</h2><p>The AI gives a score out of 10 and breaks down your logic, evidence, clarity, persuasion, and weaknesses.</p></div>
       </div>
     </section>
 
     <section class="section-page" id="practicePage">
       <div class="page-title">
-        <h1>Start practice</h1>
+        <h1>Start <span class="purple-word">practice</span></h1>
         <p>Select from popular debate prompts or write your own. The topic must be focused, safe, and clear enough for one debate session.</p>
       </div>
 
-      <aside class="panel">
+      <aside class="panel pop-float" id="practicePanel">
         <div class="panel-header">
           <h2>Choose your topic</h2>
           <p>Select from popular prompts or write your own. Overly broad topics will be blocked.</p>
+          <div class="question-note">Your topic must be framed as a clear question.</div>
         </div>
-
         <div class="panel-body">
           <div class="tab-row">
-            <button class="tab active">Most popular</button>
-            <button class="tab">Technology</button>
-            <button class="tab">Society</button>
+            <button class="tab active" data-category="popular" data-colour="#8b5cf6">Most popular</button>
+            <button class="tab" data-category="technology" data-colour="#22d3ee">Technology</button>
+            <button class="tab" data-category="society" data-colour="#f472b6">Society</button>
           </div>
 
-          <div class="topic-list" id="topicList">
-            <button class="topic-button">Should AI be allowed to assist military decision-making if humans approve the final action?</button>
-            <button class="topic-button">Should schools limit students' use of AI tools for homework?</button>
-            <button class="topic-button">Should teenagers have stricter screen-time limits on social media platforms?</button>
-            <button class="topic-button">Should governments prioritise climate adaptation over reducing emissions?</button>
-            <button class="topic-button">Should online platforms remove political misinformation more aggressively?</button>
-          </div>
+          <div class="topic-list" id="topicList"></div>
 
           <div class="custom-box">
             <label for="difficultySelect">Choose your difficulty</label>
@@ -561,7 +350,7 @@
               <option value="hard">Hard - stronger counter-arguments</option>
             </select>
 
-            <br /><br />
+            <br><br>
 
             <label for="customTopic">Write your own topic</label>
             <textarea id="customTopic" placeholder="Example: Should schools ban phones during lesson time?"></textarea>
@@ -576,23 +365,11 @@
         </div>
       </aside>
 
-      <section class="chat-preview">
-        <div class="coach-card">
-          <h2>Debate flow</h2>
-          <p>
-            Round 1: opening argument. Round 2: AI rebuttal. Round 3: final defence. After that, the AI gives a score for logic, evidence, clarity, and persuasion.
-          </p>
-        </div>
-
-        <div class="rules-card">
-          <h2>Topic safety rules</h2>
-          <ul>
-            <li>Blocked if the topic is too broad, such as “war”, “politics”, or “life”.</li>
-            <li>Blocked if it asks for harmful, hateful, violent, or illegal advice.</li>
-            <li>Blocked if it targets a protected group or encourages harassment.</li>
-            <li>Allowed if it is framed as a focused policy, ethics, school, technology, or society debate.</li>
-          </ul>
-        </div>
+      <section class="debate-room" id="debateRoom">
+        <h2>Debate room created</h2>
+        <p id="debateSummary"></p>
+        <br>
+        <p><strong>Round 1:</strong> Write your opening argument. The next version can connect this box to a real AI API so the opponent can respond automatically.</p>
       </section>
     </section>
   </main>
@@ -602,47 +379,56 @@
     const howPage = document.getElementById('howPage');
     const practicePage = document.getElementById('practicePage');
     const pageLinks = document.querySelectorAll('[data-page]');
-
-    const topicButtons = document.querySelectorAll('.topic-button');
+    const howNav = document.getElementById('howNav');
+    const topicList = document.getElementById('topicList');
     const customTopic = document.getElementById('customTopic');
     const warningBox = document.getElementById('warningBox');
     const topicStatus = document.getElementById('topicStatus');
     const startButton = document.getElementById('startButton');
     const difficultySelect = document.getElementById('difficultySelect');
+    const tabs = document.querySelectorAll('.tab');
+    const practicePanel = document.getElementById('practicePanel');
+    const debateRoom = document.getElementById('debateRoom');
+    const debateSummary = document.getElementById('debateSummary');
 
-    const broadTopics = [
-      'war',
-      'politics',
-      'religion',
-      'life',
-      'death',
-      'pov',
-      'people',
-      'society',
-      'government',
-      'history',
-      'ai',
-      'technology'
-    ];
+    const topics = {
+      popular: [
+        'Should AI be allowed to assist military decision-making if humans approve the final action?',
+        'Should schools limit students\' use of AI tools for homework?',
+        'Should teenagers have stricter screen-time limits on social media platforms?',
+        'Should governments prioritise climate adaptation over reducing emissions?',
+        'Should online platforms remove political misinformation more aggressively?'
+      ],
+      technology: [
+        'Should AI-generated content be labelled clearly on social media platforms?',
+        'Should students be allowed to use AI tools during graded assignments?',
+        'Should governments regulate facial recognition technology in public spaces?',
+        'Should companies be required to disclose when customer service is handled by AI?',
+        'Should schools teach AI literacy as a core digital skill?'
+      ],
+      society: [
+        'Should schools ban mobile phones during lesson time?',
+        'Should teenagers have a later school start time to improve wellbeing?',
+        'Should public transport fares be cheaper for students?',
+        'Should social media platforms be responsible for users\' mental health?',
+        'Should community service be compulsory for students?'
+      ]
+    };
 
-    const unsafeTerms = [
-      'how to kill',
-      'how to hurt',
-      'terrorist',
-      'bomb making',
-      'genocide is good',
-      'hate all',
-      'attack a group',
-      'self harm'
-    ];
+    const categoryColours = { popular: '#8b5cf6', technology: '#22d3ee', society: '#f472b6' };
 
+    const broadTopics = ['war', 'politics', 'religion', 'life', 'death', 'pov', 'people', 'society', 'government', 'history', 'ai', 'technology'];
+    const unsafeTerms = ['how to kill', 'how to hurt', 'terrorist', 'bomb making', 'genocide is good', 'hate all', 'attack a group', 'self harm', 'suicide', 'racist', 'sexist'];
+    const questionStarters = ['should', 'can', 'could', 'would', 'is', 'are', 'do', 'does', 'did', 'will', 'why', 'how', 'what', 'when'];
     let selectedTopic = '';
+    let currentCategory = 'popular';
 
     function showPage(pageName) {
       homePage.classList.toggle('active', pageName === 'home');
       homePage.classList.toggle('hidden', pageName !== 'home');
       howPage.classList.toggle('active', pageName === 'how-it-works');
       practicePage.classList.toggle('active', pageName === 'practice');
+      window.scrollTo({ top: 0, behaviour: 'smooth' });
     }
 
     pageLinks.forEach(link => {
@@ -654,55 +440,67 @@
       });
     });
 
+    howNav.addEventListener('click', () => howNav.classList.toggle('frozen'));
+    document.addEventListener('click', event => {
+      if (!howNav.contains(event.target)) howNav.classList.remove('frozen');
+    });
+
+    function renderTopics(category) {
+      currentCategory = category;
+      const colour = categoryColours[category];
+      document.documentElement.style.setProperty('--tab-colour', colour);
+      document.documentElement.style.setProperty('--tab-soft', `${colour}24`);
+      topicList.innerHTML = '';
+      selectedTopic = '';
+      customTopic.value = '';
+      debateRoom.classList.remove('active');
+
+      topics[category].forEach(topic => {
+        const button = document.createElement('button');
+        button.className = 'topic-button pop-float';
+        button.textContent = topic;
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.topic-button').forEach(item => item.classList.remove('selected'));
+          button.classList.add('selected');
+          customTopic.value = '';
+          selectedTopic = topic;
+          updateValidation(selectedTopic);
+        });
+        topicList.appendChild(button);
+      });
+      updateValidation('');
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(item => item.classList.remove('active'));
+        tab.classList.add('active');
+        renderTopics(tab.dataset.category);
+      });
+    });
+
+    function isQuestion(text) {
+      const cleaned = text.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '');
+      const firstWord = cleaned.split(/\s+/)[0];
+      return questionStarters.includes(firstWord) || cleaned.includes(' should ') || cleaned.includes(' whether ');
+    }
+
     function validateTopic(topic) {
       const cleaned = topic.trim().toLowerCase();
       const wordCount = cleaned.split(/\s+/).filter(Boolean).length;
 
-      if (!cleaned) {
-        return {
-          allowed: false,
-          message: 'Please select or write a topic first.'
-        };
-      }
-
-      if (unsafeTerms.some(term => cleaned.includes(term))) {
-        return {
-          allowed: false,
-          message: 'This topic is blocked because it may lead to harmful or unsafe discussion.'
-        };
-      }
-
-      if (broadTopics.includes(cleaned) || wordCount < 5) {
-        return {
-          allowed: false,
-          message: 'This topic is too broad. Try turning it into a clear question, such as “Should AI be used in military decision-making?”'
-        };
-      }
-
-      if (!cleaned.includes('should') && !cleaned.includes('?')) {
-        return {
-          allowed: false,
-          message: 'Make the topic debatable by phrasing it as a question, preferably starting with “Should...”'
-        };
-      }
-
-      if (wordCount > 28) {
-        return {
-          allowed: false,
-          message: 'This topic is too long. Keep it focused enough for one debate session.'
-        };
-      }
-
-      return {
-        allowed: true,
-        message: 'Topic approved. You can enter the debate.'
-      };
+      if (!cleaned) return { allowed: false, message: 'Please select or write a topic first.' };
+      if (unsafeTerms.some(term => cleaned.includes(term))) return { allowed: false, message: 'This topic is blocked because it may lead to harmful, hateful, illegal, or unsafe discussion.' };
+      if (broadTopics.includes(cleaned) || wordCount < 5) return { allowed: false, message: 'This topic is too broad. Try turning it into a clear debate question, such as “Should AI be used in military decision-making?”' };
+      if (!isQuestion(cleaned)) return { allowed: false, message: 'This needs to be written as an actual question. For example, start with “Should”, “Can”, “Is”, or “How”.' };
+      if (wordCount > 28) return { allowed: false, message: 'This topic is too long. Keep it focused enough for one debate session.' };
+      if (cleaned.includes('prove that') || cleaned.includes('why is everyone')) return { allowed: false, message: 'This topic sounds one-sided. Reframe it as a balanced debate question.' };
+      return { allowed: true, message: 'Topic approved. You can enter the debate.' };
     }
 
     function updateValidation(topic) {
       const result = validateTopic(topic);
       topicStatus.textContent = result.message;
-
       if (result.allowed) {
         warningBox.style.display = 'none';
         startButton.disabled = false;
@@ -713,38 +511,28 @@
         startButton.disabled = true;
         startButton.style.opacity = '0.55';
       }
-
       return result.allowed;
     }
 
-    topicButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        topicButtons.forEach(item => item.classList.remove('selected'));
-        button.classList.add('selected');
-        customTopic.value = '';
-        selectedTopic = button.textContent.trim();
-        updateValidation(selectedTopic);
-      });
-    });
-
     customTopic.addEventListener('input', () => {
-      topicButtons.forEach(item => item.classList.remove('selected'));
+      document.querySelectorAll('.topic-button').forEach(item => item.classList.remove('selected'));
       selectedTopic = customTopic.value.trim();
+      debateRoom.classList.remove('active');
       updateValidation(selectedTopic);
     });
 
     startButton.addEventListener('click', () => {
       const topic = customTopic.value.trim() || selectedTopic;
       const allowed = updateValidation(topic);
-
       if (!allowed) return;
-
-      alert(`Debate room created for: ${topic}\nDifficulty: ${difficultySelect.value}`);
+      debateSummary.textContent = `Topic: ${topic} | Difficulty: ${difficultySelect.value} | Category: ${currentCategory}`;
+      debateRoom.classList.add('active');
+      debateRoom.scrollIntoView({ behaviour: 'smooth', block: 'start' });
     });
 
     const initialPage = window.location.hash.replace('#', '') || 'home';
     showPage(initialPage);
-    updateValidation('');
+    renderTopics('popular');
   </script>
 </body>
 </html>
